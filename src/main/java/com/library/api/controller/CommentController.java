@@ -1,9 +1,11 @@
 package com.library.api.controller;
 
+import com.library.api.dto.CommentResponse;
 import com.library.api.model.Comment;
 import com.library.api.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -18,15 +20,19 @@ public class CommentController {
 
     @PostMapping("/book/{bookId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Comment create(@PathVariable String bookId, @RequestBody Comment comment) {
+    public CommentResponse create(@PathVariable String bookId, @RequestBody Comment comment) {
         return service.createComment(bookId, comment);
     }
 
     @GetMapping("/book/{bookId}")
-    public List<Comment> getByBook(@PathVariable String bookId) {
+    public List<CommentResponse> getByBook(@PathVariable String bookId) {
         return service.getCommentsByBook(bookId);
     }
 
+    @PutMapping("/book/{bookId}")
+    public CommentResponse editComment(@PathVariable String bookId, @RequestBody Comment comment) {
+        return service.updateComment(bookId, comment);
+    }
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

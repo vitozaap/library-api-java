@@ -1,12 +1,15 @@
 package com.library.api.service;
 
 
+import com.library.api.dto.CommentResponse;
 import com.library.api.model.Book;
 import com.library.api.model.Comment;
 import com.library.api.repository.BookRepository;
 import com.library.api.repository.CommentRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+
 @Service
 
 public class CommentService {
@@ -20,33 +23,36 @@ public class CommentService {
         this.bookRepository = bookRepository;
     }
 
-    public Comment createComment(String bookId, Comment newComment) {
+    public CommentResponse createComment(String bookId, Comment newComment) {
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro com o ID " + bookId + " não foi encontrado."));
+                .orElseThrow(() -> new RuntimeException("Id not found: " + bookId));
 
         newComment.setBook(book);
 
 
-        return commentRepository.save(newComment);
+        return CommentResponse.fromEntity(commentRepository.save(newComment));
     }
 
-    public List<Comment> getCommentsByBook(String bookId) {
-        return commentRepository.findByBookId(bookId);
+    public List<CommentResponse> getCommentsByBook(String bookId) {
+        return commentRepository.findByBookId(bookId)
+                .stream()
+                .map(CommentResponse::fromEntity)
+                .toList();
     }
 
-    public Comment updateComment(String commentId, Comment updatedComment) {
+    public CommentResponse updateComment(String commentId, Comment updatedComment) {
         Comment existingComment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comentário com o ID " + commentId + " não encontrado."));
+                .orElseThrow(() -> new RuntimeException("Id not found: " + commentId));
 
         existingComment.setComment(updatedComment.getComment());
 
-        return commentRepository.save(existingComment);
+        return CommentResponse.fromEntity(commentRepository.save(existingComment));
     }
 
     public void deleteComment(String commentId) {
         Comment existingComment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Comentário com o ID " + commentId + " não encontrado."));
+                .orElseThrow(() -> new RuntimeException("Id not found: " + commentId));
 
         commentRepository.delete(existingComment);
     }

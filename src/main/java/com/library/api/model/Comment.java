@@ -1,6 +1,7 @@
 package com.library.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonIgnoreProperties("comments")
     private Book book;
 }
