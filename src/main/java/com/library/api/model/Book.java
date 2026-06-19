@@ -1,5 +1,6 @@
 package com.library.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +20,10 @@ public class Book {
 
     private String name;
     private String author;
+    private String description;
 
     @OneToMany(mappedBy = "book")
+    @JsonIgnoreProperties("book")
     private List<Comment> comments;
 
 }

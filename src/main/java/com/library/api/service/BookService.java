@@ -35,6 +35,7 @@ public class BookService {
         Book existing = findById(id);
         existing.setAuthor(book.getAuthor());
         existing.setName(book.getName());
+        existing.setDescription(book.getDescription());
         return repository.save(existing);
     }
 
